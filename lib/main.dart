@@ -1,11 +1,11 @@
 // imports from external libraries
 import 'package:flutter/material.dart';
+import 'package:santa_flutter/friends_page.dart';
 
 // application entry point
 void main() {
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -18,6 +18,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        FriendsPage.routeName: (BuildContext context) => const FriendsPage(),
+      },
     );
   }
 }
@@ -32,17 +35,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final TextEditingController _controller = TextEditingController();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      print(_controller.text);
     });
+  }
+
+  void _goNext() {
+    Navigator.of(context).pushNamed(FriendsPage.routeName);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -52,19 +60,18 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'Введи название своей группы:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextField(controller: _controller, autofocus: true))
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _goNext,
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.check),
       ),
     );
   }
