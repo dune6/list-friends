@@ -1,14 +1,29 @@
 // imports from external libraries
 import 'package:flutter/material.dart';
 import 'package:santa_flutter/friends_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const String teamNameKey = "TEAM_NAME";
 
 // application entry point
 void main() {
-  runApp(const MyApp());
+  _prepareAndRun();
+}
+
+Future<void> _prepareAndRun() async {
+  // убеждаемся, что flutter запустился
+  WidgetsFlutterBinding.ensureInitialized();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final teamName = prefs.getString(teamNameKey);
+
+  runApp(MyApp(teamName: teamName));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final String? teamName;
+
+  const MyApp({this.teamName, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +32,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
       routes: {
         FriendsPage.routeName: (BuildContext context) => const FriendsPage(),
+        MyHomePage.routeName: (BuildContext context) => const MyHomePage(),
       },
+      initialRoute:
+          teamName == null ? MyHomePage.routeName : FriendsPage.routeName,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  static const routeName = "/home";
 
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -40,20 +58,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _controller.addListener(() {
-      print(_controller.text);
-    });
   }
 
-  void _goNext() {
+  Future<void> _goNext() async {
     Navigator.of(context).pushNamed(FriendsPage.routeName);
+    // instance of shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(teamNameKey, _controller.text);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text("Santa"),
       ),
       body: Center(
         child: Column(
