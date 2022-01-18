@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.santa_flutter">
    <application
-        android:label="santa_flutter"
+        android:label="Secret Santa"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

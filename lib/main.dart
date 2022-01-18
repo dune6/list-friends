@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: TextField(controller: _controller, autofocus: true))
+                child: TextField(controller: _controller, autofocus: true, ))
           ],
         ),
       ),

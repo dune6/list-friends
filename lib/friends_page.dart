@@ -26,6 +26,8 @@ class _FriendsPageState extends State<FriendsPage> {
     "Ilya",
     "Elizabeth"
   ];
+  final ScrollController _controller = ScrollController();
+
 
   @override
   void initState() {
@@ -53,6 +55,7 @@ class _FriendsPageState extends State<FriendsPage> {
           separatorBuilder: _separatorBuilder,
           itemCount: _friends.length,
           padding: const EdgeInsets.all(15),
+          controller: _controller,
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -104,6 +107,11 @@ class _FriendsPageState extends State<FriendsPage> {
             Random().nextInt(256)));
     setState(() {
       _friends.add(friend);
+      _controller.animateTo(
+        _controller.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
     });
   }
 }
