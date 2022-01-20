@@ -1,1 +1,1 @@
-# Secret Santa mobile application
+# Flutter mobile application
